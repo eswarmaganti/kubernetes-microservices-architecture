@@ -1,0 +1,43 @@
+services:
+  voting-app:
+    container_name: voting-app
+    build:
+      context: voting-app/
+      # platforms:
+      #   - linux/arm64
+      #   - linux/amd64
+    image: eswarmaganti/voting-app:latest
+    ports:
+      - "5051:5050"
+    environment:
+      - PORT=5050
+      - MONGODB_URI=mongodb://admin:admin123@mongodb-server:27017/voting-app-db?authSource=admin
+    depends_on:
+      - mongodb-server
+  results-app:
+    container_name: results-app
+    image: eswarmaganti/results-app:latest
+    build:
+      context: results-app/
+      # platforms:
+      #   - linux/arm64
+      #   - linux/amd64
+    ports:
+      - 6061:6060
+    environment:
+      - PORT=6060
+      - MONGODB_URI=mongodb://admin:admin123@mongodb-server:27017/voting-app-db?authSource=admin
+    depends_on:
+      - mongodb-server
+  mongodb-server:
+    container_name: mongodb-server
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin123
+    volumes:
+      - type: bind
+        source: /Users/eswarmaganti/data/db
+        target: /data/db
