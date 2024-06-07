@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: results-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: results-app
+  template:
+    metadata:
+      name: results-app-container
+      labels:
+        app: results-app
+    spec:
+      containers:
+        - name: results-app
+          image: eswarmaganti/results-app:arm64
+          ports:
+            - containerPort: 6060
+          env:
+            - name: PORT
+              value: "6060"
+            - name: MONGODB_URI
+              value: mongodb://admin:admin123@mongodb-service:27017/voting-app-db?authSource=admin
