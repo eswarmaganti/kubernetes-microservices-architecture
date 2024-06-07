@@ -1,5 +1,5 @@
 node_modules
 .env
 dist
-voting-app/.git
-results-app/.git
+voting-app
+results-app
